@@ -22,7 +22,7 @@ app.post('/ledger',async(req,res)=>{
    console.log(valuesArray);
     const key = crypto.randomBytes(6).toString('hex');
     const date = new Date()
-    let curentDate = `${date.getDate()} - ${date.getMonth()+1} - ${date.getFullYear()}`
+    let curentDate = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
     valuesArray.unshift(key,curentDate)
     await googleSheet.spreadsheets.values.append({
         spreadsheetId:sheetid,
