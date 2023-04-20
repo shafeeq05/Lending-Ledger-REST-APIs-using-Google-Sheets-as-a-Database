@@ -11,6 +11,6 @@ we can create,read and delete data from google sheet
 - Clone this git repo
 - Run `npm i`
 - Add env SHEET_ID , GOOGLE_API
-- Add your credentials to project
+- Add your credentials in credentials.json
 - run `nodemon main `
 
