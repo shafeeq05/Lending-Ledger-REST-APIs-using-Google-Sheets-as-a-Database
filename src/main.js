@@ -21,7 +21,9 @@ app.post('/ledger',async(req,res)=>{
     const valuesArray = Object.values(allBody)
    console.log(valuesArray);
     const key = crypto.randomBytes(6).toString('hex');
-    valuesArray.unshift(key,new Date())
+    const date = new Date()
+    let curentDate = `${date.getDate()} - ${date.getMonth()+1} - ${date.getFullYear()}`
+    valuesArray.unshift(key,curentDate)
     await googleSheet.spreadsheets.values.append({
         spreadsheetId:sheetid,
         range:'sheet1!A2:F1000',
@@ -108,7 +110,7 @@ app.delete('/ledger/:id',async(req,res)=>{
           });
           res.status(200).json("deleted")
           console.log(getRow.data.values);
-          console.log(update);
+        //   console.log(update);
         }
         else{
            throw new Error("id not found")
