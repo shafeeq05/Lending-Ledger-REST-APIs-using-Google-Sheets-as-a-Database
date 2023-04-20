@@ -2,7 +2,7 @@
 const { google } = require("googleapis"); 
 
 require ('dotenv').config({path:'../.env'})
-console.log(process.env.GOOGLE_API);
+
 
 //destructuring credentials.json file for my private_key and clint_email
 const { private_key, client_email } = require("../credentials.json");

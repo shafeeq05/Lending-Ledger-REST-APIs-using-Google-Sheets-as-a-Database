@@ -7,6 +7,7 @@ const {googleSheet,sheetid,clint} = require('./sheet');
 
 //require sheet Sheema from scheemaValidation module-----------------------
 const sheetScheema = require("./scheemaValidation");
+
 const app = express()
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
@@ -30,7 +31,7 @@ app.post('/ledger',async(req,res)=>{
             values:[valuesArray]
         }
     })
-    res.sendStatus(200)
+    res.status(200).json("Posted successfully")
     
    } catch (error) {
     console.log("error",error)
@@ -40,13 +41,17 @@ app.post('/ledger',async(req,res)=>{
 
 //get all data from google sheet -------------------------------------
 app.get('/ledger',async(req,res)=>{
-
-const getRow = await googleSheet.spreadsheets.values.get({
-    auth:clint,
-    spreadsheetId:sheetid,
-    range:"Sheet1"
-})
-res.status(200).json(getRow.data.values)
+try {
+    const getRow = await googleSheet.spreadsheets.values.get({
+        auth:clint,
+        spreadsheetId:sheetid,
+        range:"Sheet1"
+    })
+    res.status(200).json(getRow.data.values)
+    
+} catch (error) {
+    res.status(400).json("Bad request")
+}
 
 })
 
@@ -68,6 +73,53 @@ app.get('/ledger/:id',async(req,res)=>{
         console.log(error);
     }
    
+})
+
+//delete row finding userid-----------------------------------------------------
+app.delete('/ledger/:id',async(req,res)=>{
+    try {
+        console.log(req.params.id);
+        const getRow = await googleSheet.spreadsheets.values.get({
+            auth:clint,
+            spreadsheetId:sheetid,
+            range:"Sheet1"
+        })
+        const rowIndex = getRow.data.values.findIndex((arr)=> arr[0]===req.params.id)
+        if(rowIndex>0){
+        console.log(rowIndex+1);
+
+       
+
+       const update =  await googleSheet.spreadsheets.values.batchUpdate({
+           spreadsheetId:sheetid,
+           auth:clint,
+           resource: {
+            
+            data: [
+              {
+                range: `Sheet1!${rowIndex + 1}:${rowIndex + 6}`,
+                values: [Array(6).fill('')],
+                
+              },
+            ],
+            valueInputOption: 'USER_ENTERED',
+          }
+            
+          });
+          res.status(200).json("deleted")
+          console.log(getRow.data.values);
+          console.log(update);
+        }
+        else{
+           throw new Error("id not found")
+        }
+        
+
+    } catch (error) {
+        res.status(404).json(error.message)
+        console.log("id not found");
+    }
+
 })
 
 
