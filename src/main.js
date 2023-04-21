@@ -17,8 +17,10 @@ app.use(express.json())
 app.post('/ledger',async(req,res)=>{
     
    try {
-    const allBody = sheetScheema.parse(req.body)
-    const valuesArray = Object.values(allBody)
+    // console.log(typeof req.body);
+    // const allBody = sheetScheema.parse(req.body)
+    console.log(typeof allBody);
+    const valuesArray = Object.values(req.body)
    console.log(valuesArray);
     const key = crypto.randomBytes(6).toString('hex');
     const date = new Date()
