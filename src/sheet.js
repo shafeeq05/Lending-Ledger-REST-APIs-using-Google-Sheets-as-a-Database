@@ -8,8 +8,8 @@ require ('dotenv').config({path:'../.env'})
 const { private_key, client_email } = require("../credentials.json");
 
 //assign sheet id into variable---------------------------------------
-const sheetid = "19exs0rHJ6piDaCU69BGXLunAfxwhXwjh6m_-8gqZ5oI";
-
+const sheetid = process.env.SHEET_ID;
+console.log(sheetid);
 //create clint instence for auth-------------------------------------
 const clint = new google.auth.JWT(client_email, null, private_key, [
   process.env.GOOGLE_API,
